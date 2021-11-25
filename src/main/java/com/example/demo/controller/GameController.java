@@ -25,12 +25,30 @@ public class GameController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    GameResource[] getAll(@RequestParam(required = false) Integer  publisherId,
+    GameResource[] getAll(@RequestParam(required = false) String  name,
+                          @RequestParam(required = false) Integer  publisherId,
                           @RequestParam(required = false) Object expand) {
-        System.out.println(publisherId);
-        Game[] entities = publisherId == null ?
-                gameRepository.select() :
-                gameRepository.selectByPublisherId(publisherId);
+
+        Game[] entities;
+//        = publisherId == null ?
+//                gameRepository.select() :
+//                gameRepository.selectByPublisherId(publisherId);
+        if (publisherId == null) {
+            if (name == null) {
+                entities = gameRepository.select();
+            }else{
+                entities = gameRepository.selectByName(name);
+            }
+        }else {
+            if (name == null) {
+                entities = gameRepository.selectByPublisherId(publisherId);
+            }else{
+                entities = gameRepository.selectByName(name);
+            }
+        }
+//        entities = name == null ?
+//                gameRepository.select() :
+//                gameRepository.selectByName(name);
         return Arrays.stream(entities)
                 .map(entity -> {
                     GameResource resource = new GameResource(entity);
@@ -52,33 +70,34 @@ public class GameController {
                 .toArray(GameResource[]::new);
     }
 
-    @RequestMapping(value = "/name", method = RequestMethod.GET)
-    GameResource[] getSelectName(@RequestParam(required = false) String  name,
-                          @RequestParam(required = false) Object expand) {
-        System.out.println(name);
-        Game[] entities = name == null ?
-                gameRepository.select() :
-                gameRepository.selectByName(name);
-        return Arrays.stream(entities)
-                .map(entity -> {
-                    GameResource resource = new GameResource(entity);
-                    if (expand != null) {
-                        resource.setPublisher(new CompanyResource(
-                                companyRepository.select(entity.getDeveloper_id()))
-                        );
-
-                        resource.setDeveloper(new CompanyResource(
-                                companyRepository.select(entity.getPublisher_id()))
-                        );
-
-                        resource.setGenreResource(new GenreResource(
-                                genreRepository.select(entity.getGenre_id()))
-                        );
-                    }
-                    return resource;
-                })
-                .toArray(GameResource[]::new);
-    }
+//    @RequestMapping(value = "/name", method = RequestMethod.GET)
+//    GameResource[] getSelectName(@RequestParam(required = false) String  name,
+//                                 @RequestParam(required = false) Object expand) {
+//        System.out.println(name);
+//        Game[] entities = name == null ?
+//                gameRepository.select() :
+//                gameRepository.selectByName(name);
+//        return Arrays.stream(entities)
+//                .map(entity -> {
+//                    GameResource resource = new GameResource(entity);
+//                    if (expand != null) {
+//
+//                        resource.setPublisher(new CompanyResource(
+//                                companyRepository.select(entity.getDeveloper_id()))
+//                        );
+//
+//                        resource.setDeveloper(new CompanyResource(
+//                                companyRepository.select(entity.getPublisher_id()))
+//                        );
+//
+//                        resource.setGenreResource(new GenreResource(
+//                                genreRepository.select(entity.getGenre_id()))
+//                        );
+//                    }
+//                    return resource;
+//                })
+//                .toArray(GameResource[]::new);
+//    }
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

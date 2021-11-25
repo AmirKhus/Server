@@ -21,6 +21,17 @@ public class GameResource extends BaseResource {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private GenreResource genreResource;
 
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    private GameResource gameResource;
+//
+//    public GameResource getGameResource() {
+//        return gameResource;
+//    }
+//
+//    public void setGameResource(GameResource gameResource) {
+//        this.gameResource = gameResource;
+//    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private OrderResource[] orderResource;
 

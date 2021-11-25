@@ -27,7 +27,7 @@ public class GameRepository implements IRestRepository<Game>{
 
     private static String selectByName = "SELECT \"id\", \"name\", \"developer_id\", \"publisher_id\", \"genre_id\" , \"price\", \"date_of_publication\"   " +
             "FROM \"game\" " +
-            "WHERE \"name\" = ? ";
+            "WHERE \"name\" LIKE ? ";
 
     private static String insertQuery = "INSERT INTO \"game\"(\"name\",\"developer_id\", \"publisher_id\", \"genre_id\" , \"price\", \"date_of_publication\"  ) " +
             "VALUES (?, ?, ?, ?, ?, ?) " +
@@ -40,7 +40,7 @@ public class GameRepository implements IRestRepository<Game>{
 
     private static String deleteQuery = "DELETE FROM \"game\" " +
             "WHERE \"id\" = ? " +
-            "RETURNING \"id\", \"name\"\"developer_id\", \"publisher_id\", \"genre_id\" , \"price\", \"date_of_publication\"  ";
+            "RETURNING \"id\", \"name\", \"developer_id\", \"publisher_id\", \"genre_id\" , \"price\", \"date_of_publication\"  ";
 
     public GameRepository(JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
